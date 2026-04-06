@@ -4,11 +4,53 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Home() {
+  // Text to be split
+  const text = "Welcome to My Leica Project";
+
+  // Split the text into individual characters
+  const characters = text.split("");
+
+  // Variants for the animation
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.03, delayChildren: 0.04 * i },
+    }),
+  };
+
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <section className="h-screen bg-gray-900 text-white flex flex-col items-center justify-center">
       {/* Text Content */}
       <div className="text-center mb-8">
-        <h1 className="text-5xl font-bold">Welcome to My Leica Project</h1>
+        <motion.h1
+          className="text-5xl font-bold"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {characters.map((char, index) => (
+            <motion.span key={index} variants={childVariants}>
+              {char}
+            </motion.span>
+          ))}
+        </motion.h1>
         <p className="mt-4 text-lg">
           Capturing moments through the lens of a Leica camera.
         </p>
@@ -24,11 +66,9 @@ export default function Home() {
           <img
             src="/photos/photo1.jpg?v=1"
             alt="Sample Leica Image"
-            // layout="responsive"
             width={160}
             height={160}
             className="rounded-full"
-          // priority={true}
           />
         </div>
       </motion.div>
