@@ -4,11 +4,10 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Hardcoded config (TEMPORARY)
 cloudinary.config({
-  cloud_name: 'ddnjcyynn',
-  api_key: '269731457526941',
-  api_secret: 'DYrpxD7QIvBsXhX0mdhNWWTmskg',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true,
 });
 
