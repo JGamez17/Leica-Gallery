@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import * as Dialog from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import UploadModal from './UploadModal';
 
 type Photo = {
   id: string;
@@ -17,7 +18,8 @@ const ImageGallery = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchPhotos = () => {
+    setLoading(true);
     fetch('/api/photos')
       .then(res => res.json())
       .then(data => {
@@ -28,6 +30,10 @@ const ImageGallery = () => {
         console.error('Failed to fetch photos:', err);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchPhotos();
   }, []);
 
   if (loading) {
@@ -40,8 +46,11 @@ const ImageGallery = () => {
 
   if (photos.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[400px] bg-gray-900">
-        <p className="text-white text-lg">No photos yet. Upload some!</p>
+      <div className="relative min-h-screen bg-gray-900">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <p className="text-white text-lg">No photos yet. Upload some!</p>
+        </div>
+        <UploadModal onUploadSuccess={fetchPhotos} />
       </div>
     );
   }
@@ -68,6 +77,8 @@ const ImageGallery = () => {
           </motion.div>
         ))}
       </div>
+
+      <UploadModal onUploadSuccess={fetchPhotos} />
 
       {/* Fullscreen Lightbox */}
       <Dialog.Root open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
