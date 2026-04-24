@@ -17,11 +17,6 @@ cloudinary.config({
   secure: true,
 });
 
-console.log('Cloudinary hardcoded config:', {
-  cloud_name: cloudinary.config().cloud_name,
-  api_key: cloudinary.config().api_key ? 'present' : 'MISSING',
-});
-
 export async function POST(request: NextRequest) {
   try {
     console.log('Starting upload...');
@@ -47,7 +42,7 @@ export async function POST(request: NextRequest) {
     console.log('Buffer created, size:', buffer.length);
     
     // Upload to Cloudinary
-    const uploadResult: any = await new Promise((resolve, reject) => {
+    const uploadResult: { secure_url: string } = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'leica-gallery',
@@ -59,7 +54,8 @@ export async function POST(request: NextRequest) {
             reject(error);
           } else {
             console.log('Upload success!', result?.secure_url);
-            resolve(result);
+            if (result) resolve(result);
+      else reject(new Error('No result from Cloudinary'));
           }
         }
       );
@@ -78,11 +74,9 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ success: true, photo }, { status: 201 });
     
-  } catch (error) {
-    console.error('Upload error:', error);
+  } catch {
     return NextResponse.json({ 
-      error: 'Upload failed',
-      details: error,
+      error: 'Fetching photos failed',
     }, { status: 500 });
   }
 }
@@ -93,7 +87,7 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
     return NextResponse.json({ photos });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Fetch failed' }, { status: 500 });
   }
 }

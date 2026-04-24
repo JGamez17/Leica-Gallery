@@ -3,7 +3,7 @@
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 
 type UploadModalProps = {
   onUploadSuccess: () => void;
@@ -41,7 +41,7 @@ const UploadModal = ({ onUploadSuccess }: UploadModalProps) => {
       setTitle("");
       setFile(null);
       onUploadSuccess();
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

@@ -56,20 +56,19 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Rotating Static Image */}
       <motion.div
         className="w-40 h-40 relative mb-8 flex justify-center items-center"
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       >
         <div className="w-40 h-40 overflow-hidden rounded-full">
-          <img
+          <Image
             src="/photos/photo1.jpg?v=1"
             alt="Sample Leica Image"
             width={160}
             height={160}
             className="rounded-full"
-          />
+            /> 
         </div>
       </motion.div>
 

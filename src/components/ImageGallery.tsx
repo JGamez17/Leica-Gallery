@@ -80,7 +80,7 @@ const ImageGallery = () => {
          whileTap={{ scale: 0.95 }}
        >
          <div onClick={() => setSelectedPhoto(photo)}>
-           <img
+           <Image
              src={photo.imageUrl}
              alt={photo.title}
              width={300}
