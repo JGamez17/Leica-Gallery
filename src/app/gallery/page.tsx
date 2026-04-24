@@ -1,18 +1,23 @@
-"use client"
+"use client";
 
-import ImageGallery from '@/components/ImageGallery';
-import Header from '@/components/Header';
+import { useState } from "react";
+import ImageGallery from "@/components/ImageGallery";
+import Header from "@/components/Header";
 
 export default function GalleryPage() {
-    return (
-        <main className="min-h-screen ">
-            <Header />
-            <h1 className="text-4xl font-bold  text-center py-6">DtMF</h1>
-            <ImageGallery />
+  const [refreshKey, setRefreshKey] = useState(0);
 
+  const handleUploadSuccess = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
 
-        </main>
-    );
+  return (
+    <main className="min-h-screen bg-gray-900">
+      <Header onUploadSuccess={handleUploadSuccess} />
+      <h1 className="text-4xl font-bold text-white text-center py-6">DtMF</h1>
+      <ImageGallery key={refreshKey} />
+    </main>
+  );
 }
 
 
