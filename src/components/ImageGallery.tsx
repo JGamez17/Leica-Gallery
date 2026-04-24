@@ -32,6 +32,20 @@ const ImageGallery = () => {
       });
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Delete this photo?')) return;
+    try {
+      await fetch('/api/photos', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      fetchPhotos();
+    } catch (err) {
+      console.error('Delete failed:', err);
+    }
+  };
+
   useEffect(() => {
     fetchPhotos();
   }, []);
@@ -59,22 +73,29 @@ const ImageGallery = () => {
     <div className="bg-gray-900 min-h-screen p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {photos.map((photo) => (
-          <motion.div
-            key={photo.id}
-            className="relative cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setSelectedPhoto(photo)}
-          >
-            <img
-              src={photo.imageUrl}
-              alt={photo.title}
-              width={300}
-              height={300}
-              className="rounded-lg shadow-md object-cover w-full h-64"
-            />
-            <p className="text-white text-sm text-center mt-2">{photo.title}</p>
-          </motion.div>
+         <motion.div
+         key={photo.id}
+         className="relative cursor-pointer group"
+         whileHover={{ scale: 1.05 }}
+         whileTap={{ scale: 0.95 }}
+       >
+         <div onClick={() => setSelectedPhoto(photo)}>
+           <img
+             src={photo.imageUrl}
+             alt={photo.title}
+             width={300}
+             height={300}
+             className="rounded-lg shadow-md object-cover w-full h-64"
+           />
+           <p className="text-white text-sm text-center mt-2">{photo.title}</p>
+         </div>
+         <button
+           onClick={() => handleDelete(photo.id)}
+           className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+         >
+           Delete
+         </button>
+       </motion.div>
         ))}
       </div>
 

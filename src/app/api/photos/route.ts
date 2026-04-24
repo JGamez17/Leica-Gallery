@@ -97,3 +97,31 @@ export async function GET() {
     return NextResponse.json({ error: 'Fetch failed' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { id } = await request.json();
+
+    if (!id) {
+      return NextResponse.json({ error: 'Missing photo id' }, { status: 400 });
+    }
+
+    const photo = await prisma.photo.findUnique({ where: { id } });
+
+    if (!photo) {
+      return NextResponse.json({ error: 'Photo not found' }, { status: 404 });
+    }
+
+    // Delete from Cloudinary
+    const publicId = photo.imageUrl.split('/').slice(-2).join('/').split('.')[0];
+    await cloudinary.uploader.destroy(publicId);
+
+    // Delete from DB
+    await prisma.photo.delete({ where: { id } });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Delete error:', error);
+    return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
+  }
+}
