@@ -16,7 +16,7 @@
 
 ## 🌐 Live Demo
 
-🔗 **[https://leica-gallery-4qm8-i66vxku8z-jgamez17s-projects.vercel.app/](https://leica-gallery-4qm8-i66vxku8z-jgamez17s-projects.vercel.app/)**
+🔗 **[https://leica-gallery-4qm8.vercel.app](https://leica-gallery-4qm8.vercel.app)**
 
 ---
 
